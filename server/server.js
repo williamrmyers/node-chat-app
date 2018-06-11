@@ -1,26 +1,25 @@
-const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
+const http = require('http');
+const express = require('express');
+const socketIO = require('socket.io');
 
-let app = express();
+const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+let app = express();
+let server = http.createServer(app);
+let io = socketIO(server);
 
-// Defines path to public dir using "path" package.
-const publicPath = path.join(__dirname, './../public');
 app.use(express.static(publicPath));
 
+io.on('connection', (socket) => {
+  console.log('New user connected');
 
-
-// app.get(`/`, (req, res) => {
-//   res.sendFile(path.join(__dirname + './../public/index.html'));
-// });
-
-
-
-app.listen(port, ()=>{
-  console.log(`Server running on ${port}`);
+  socket.on('disconnect', () => {
+    console.log('User was disconnected');
+  });
 });
 
-module.exports = {app};
+server.listen(port, () => {
+  console.log(`Server is up on ${port}`);
+});
