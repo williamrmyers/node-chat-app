@@ -7,11 +7,14 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
   console.log('Disconnected from server');
 });
-  //Listens for newMessage event, then renders a new message to the screen with jQuery.
+
+//Listens for newMessage event, then renders a new message to the screen with jQuery.
 socket.on(`newMessage`, (message) => {
+  let formattedTimeStamp = moment(message.createdAt).format('h:mm a')
+
   console.log(`recieved new message!`, message);
   let li = $('<li></li>');
-  li.text(`${message.from} : ${message.text}`);
+  li.text(`${message.from} ${formattedTimeStamp} : ${message.text}`);
 
   $('#messages').append(li);
 });
@@ -20,23 +23,15 @@ socket.on(`newMessage`, (message) => {
 socket.on('newLocationMessage', (message) => {
   let li = $('<li></li>');
   let a = $('<a target="_blank" >My Current Location</a>');
+  let formattedTimeStamp = moment(message.createdAt).format('h:mm a');
 
-  li.text(`${message.from} :`);
+  li.text(`${message.from} ${formattedTimeStamp}:`);
   a.attr('href', message.url);
   li.append(a);
 
   $('#messages').append(li);
 });
 
-
-
-
-socket.emit('createMessage', {
-  from: 'frank',
-  text: 'HI!'
-}, (data) => {
-  console.log(`Message recieved from server.`, data);
-});
 
 
 $('#message-form').on('submit', (e) => {
