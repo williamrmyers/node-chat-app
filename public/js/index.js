@@ -12,10 +12,6 @@ socket.on(`newMessage`, (message) => {
   console.log(`recieved new message!`, message);
 });
 
-
-
-
-
 // socket.on('newEmail', (email) => {
 //   console.log(`New Email!`, email);
 // });
