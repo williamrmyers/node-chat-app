@@ -8,11 +8,6 @@ socket.on('disconnect', () => {
   console.log('Disconnected from server');
 });
 
-socket.emit('createMessage', {
-  from: 'Steffi',
-  text: 'this is a message!'
-});
-
 socket.on(`newMessage`, (message) => {
   console.log(`recieved new message!`, message);
 });
