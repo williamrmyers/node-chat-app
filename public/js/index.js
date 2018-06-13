@@ -7,7 +7,7 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
   console.log('Disconnected from server');
 });
-
+  //Listens for newMessage event, then renders a new message to the screen with jQuery.
 socket.on(`newMessage`, (message) => {
   console.log(`recieved new message!`, message);
   let li = $('<li></li>');
@@ -15,6 +15,20 @@ socket.on(`newMessage`, (message) => {
 
   $('#messages').append(li);
 });
+
+
+socket.on('newLocationMessage', (message) => {
+  let li = $('<li></li>');
+  let a = $('<a target="_blank" >My Current Location</a>');
+
+  li.text(`${message.from} :`);
+  a.attr('href', message.url);
+  li.append(a);
+
+  $('#messages').append(li);
+});
+
+
 
 
 socket.emit('createMessage', {
@@ -35,6 +49,34 @@ $('#message-form').on('submit', (e) => {
     $('input')[0].value = '';
   });
 });
+
+
+
+let locationButton = $('#send-location');
+locationButton.on('click', () => {
+  if (!navigator.geolocation) {
+    /* geolocation IS NOT available */
+    return alert(`Geolocation not supported by your browser.`);
+  } else {
+    /* geolocation is available */
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position);
+      socket.emit('currentLocationMessage', {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      });
+    }, (e) => {
+      console.log(`Unable to fetch location.`);
+    });
+  }
+});
+
+
+
+
+
+
+
 
 // socket.on('newEmail', (email) => {
 //   console.log(`New Email!`, email);
