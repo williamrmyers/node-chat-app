@@ -16,46 +16,20 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  socket.emit('newMessage', generateMessage('Admin', 'Welcome to Chat.'));
+  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
-  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined.'));
+  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
-
-
-
-
-
-  // socket.emit('newEmail', {
-  //   from: 'bort@test.com',
-  //   subject: 'My Wife',
-  //   createdAt: 12324
-  // });
-  //
-  // socket.on('createEmail', (newEmail) => {
-  //   console.log(`createEmail`, newEmail);
-  // });
-
-
-
-
-
-  socket.on('createMessage', (message) => {
-    console.log(`Message Created`, message);
-
-    io.emit('newMessage', {
-      from: message.from,
-      text: message.text,
-      createdAt: new Date().getTime()
-    });
-
-
+  socket.on('createMessage', (message, callback) => {
+    console.log('createMessage', message);
+    io.emit('newMessage', generateMessage(message.from, message.text));
+    callback('This is from the server.');
     // socket.broadcast.emit('newMessage', {
     //   from: message.from,
     //   text: message.text,
     //   createdAt: new Date().getTime()
     // });
   });
-
 
   socket.on('disconnect', () => {
     console.log('User was disconnected');
