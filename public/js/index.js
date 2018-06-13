@@ -42,11 +42,13 @@ socket.emit('createMessage', {
 $('#message-form').on('submit', (e) => {
   e.preventDefault();
 
+  let messageTextBox = $('[name=message]');
+
   socket.emit(`createMessage`, {
     from: 'pinkfloyed',
-    text: $('input')[0].value
+    text: messageTextBox.val()
   }, () => {
-    $('input')[0].value = '';
+    messageTextBox.val('')
   });
 });
 
@@ -59,13 +61,18 @@ locationButton.on('click', () => {
     return alert(`Geolocation not supported by your browser.`);
   } else {
     /* geolocation is available */
+    locationButton.attr('disabled', 'disabled').text('Sending location...');
+
     navigator.geolocation.getCurrentPosition((position) => {
+      locationButton.removeAttr('disabled').text('Send location');
+
       console.log(position);
       socket.emit('currentLocationMessage', {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
       });
     }, (e) => {
+      locationButton.removeAttr('disabled').text('Send location');
       console.log(`Unable to fetch location.`);
     });
   }
