@@ -9,27 +9,47 @@ socket.on('disconnect', () => {
 });
 
 //Listens for newMessage event, then renders a new message to the screen with jQuery.
+
 socket.on(`newMessage`, (message) => {
-  let formattedTimeStamp = moment(message.createdAt).format('h:mm a')
+  let formattedTimeStamp = moment(message.createdAt).format('h:mm a');
+  let template = $('#message-template').html();
+  let html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTimeStamp
+  });
 
-  console.log(`recieved new message!`, message);
-  let li = $('<li></li>');
-  li.text(`${message.from} ${formattedTimeStamp} : ${message.text}`);
+  $('#messages').append(html);
 
-  $('#messages').append(li);
+
+  // console.log(`recieved new message!`, message);
+  // let li = $('<li></li>');
+  // li.text(`${message.from} ${formattedTimeStamp} : ${message.text}`);
+  //
+  // $('#messages').append(li);
 });
 
 
 socket.on('newLocationMessage', (message) => {
-  let li = $('<li></li>');
-  let a = $('<a target="_blank" >My Current Location</a>');
   let formattedTimeStamp = moment(message.createdAt).format('h:mm a');
+  let template = $('#location-message-template').html();
+  let html = Mustache.render(template, {
+    url: message.url,
+    from: message.from,
+    createdAt: formattedTimeStamp
+  });
 
-  li.text(`${message.from} ${formattedTimeStamp}:`);
-  a.attr('href', message.url);
-  li.append(a);
+  $('#messages').append(html);
 
-  $('#messages').append(li);
+  // let li = $('<li></li>');
+  // let a = $('<a target="_blank" >My Current Location</a>');
+  // let formattedTimeStamp = moment(message.createdAt).format('h:mm a');
+  //
+  // li.text(`${message.from} ${formattedTimeStamp}:`);
+  // a.attr('href', message.url);
+  // li.append(a);
+
+  // $('#messages').append(li);
 });
 
 
