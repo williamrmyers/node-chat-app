@@ -2,14 +2,14 @@ var socket = io();
 
 let scrollToBottom = () => {
   // Selectors
-  var messages = jQuery('#messages');
-  var newMessage = messages.children('li:last-child')
+  let messages = jQuery('#messages');
+  let newMessage = messages.children('li:last-child')
   // Heights
-  var clientHeight = messages.prop('clientHeight');
-  var scrollTop = messages.prop('scrollTop');
-  var scrollHeight = messages.prop('scrollHeight');
-  var newMessageHeight = newMessage.innerHeight();
-  var lastMessageHeight = newMessage.prev().innerHeight();
+  let clientHeight = messages.prop('clientHeight');
+  let scrollTop = messages.prop('scrollTop');
+  let scrollHeight = messages.prop('scrollHeight');
+  let newMessageHeight = newMessage.innerHeight();
+  let lastMessageHeight = newMessage.prev().innerHeight();
 
   if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
     messages.scrollTop(scrollHeight);
