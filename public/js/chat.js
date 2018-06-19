@@ -100,7 +100,6 @@ $('#message-form').on('submit', (e) => {
   let messageTextBox = $('[name=message]');
 
   socket.emit(`createMessage`, {
-    from: 'pinkfloyed',
     text: messageTextBox.val()
   }, () => {
     messageTextBox.val('')
